@@ -1,40 +1,49 @@
+import common
 import requests
 
 
 class Brand:
 
-    Date = ""
-    Code = 0
-    CompanyName = ""
-    CompanyNameEnglish = ""
-    Sector17Code = ""
-    Sector17CodeName = ""
-    Sector33Code = ""
-    Sector33CodeName = ""
-    ScaleCategory = ""
-    MarketCode = ""
-    MarketCodeName = ""
+    __date = ""
+    __brand_code = 0
+    __company_name = ""
+    __company_name_english = ""
+    __sector17_code = ""
+    __sector17_code_name = ""
+    __sector33_code = ""
+    __sector33_code_name = ""
+    __scale_category = ""
+    __market_code = ""
+    __market_code_name = ""
+
+    def get_brand_data_list(id_token):
+        _brand_data_list = [Brand(
+            info) for info in Brand.get_brand_info(id_token)]
+        if common.DEBUG_LEVEL > 0:
+            for _brand_data in _brand_data_list:
+                _brand_data.print()
+        return _brand_data_list
+
+    def get_brand_info(id_token):
+        _headers = {'Authorization': 'Bearer {}'.format(id_token)}
+        _information_get = requests.get(
+            f"https://api.jquants.com/v1/listed/info", headers=_headers)
+        return _information_get.json()['info']
+
 
     def __init__(self, data) -> None:
-        self.Date = data['Date']
-        self.Code = data['Code']
-        self.CompanyName = data['CompanyName']
-        self.CompanyNameEnglish = data['CompanyNameEnglish']
-        self.Sector17Code = data['Sector17Code']
-        self.Sector17CodeName = data['Sector17CodeName']
-        self.Sector33Code = data['Sector33Code']
-        self.Sector33CodeName = data['Sector33CodeName']
-        self.ScaleCategory = data['ScaleCategory']
-        self.MarketCode = data['MarketCode']
-        self.MarketCodeName = data['MarketCodeName']
+        self.__date = data['Date']
+        self.__brand_code = data['Code']
+        self.__company_name = data['CompanyName']
+        self.__company_name_english = data['CompanyNameEnglish']
+        self.__sector17_code = data['Sector17Code']
+        self.__sector17_code_name = data['Sector17CodeName']
+        self.__sector33_code = data['Sector33Code']
+        self.__sector33_code_name = data['Sector33CodeName']
+        self.__scale_category = data['ScaleCategory']
+        self.__market_code = data['MarketCode']
+        self.__market_code_name = data['MarketCodeName']
         pass
-
-    def getBrandInfo(idToken):
-        headers = {'Authorization': 'Bearer {}'.format(idToken)}
-        information_get = requests.get(
-            f"https://api.jquants.com/v1/listed/info", headers=headers)
-        information_json = information_get.json()
-        return information_json['info']
 
     def print(self):
         print(f'{self.getDate()}:{self.getCode()}:{self.getCompanyName()}({self.getCompanyNameEnglish()}):', end="")
@@ -43,34 +52,34 @@ class Brand:
             f'{self.getScaleCategory()}:{self.getMarketCodeName()}({self.getMarketCode()}):')
 
     def getDate(self):
-        return self.Date
+        return self.__date
 
     def getCode(self):
-        return self.Code
+        return self.__brand_code
 
     def getCompanyName(self):
-        return self.CompanyName
+        return self.__company_name
 
     def getCompanyNameEnglish(self):
-        return self.CompanyNameEnglish
+        return self.__company_name_english
 
     def getSector17Code(self):
-        return self.Sector17Code
+        return self.__sector17_code
 
     def getSector17CodeName(self):
-        return self.Sector17CodeName
+        return self.__sector17_code_name
 
     def getSector33Code(self):
-        return self.Sector33Code
+        return self.__sector33_code
 
     def getSector33CodeName(self):
-        return self.Sector33CodeName
+        return self.__sector33_code_name
 
     def getScaleCategory(self):
-        return self.ScaleCategory
+        return self.__scale_category
 
     def getMarketCode(self):
-        return self.MarketCode
+        return self.__market_code
 
     def getMarketCodeName(self):
-        return self.MarketCodeName
+        return self.__market_code_name

@@ -2,6 +2,7 @@ import os
 import datetime
 
 DATA_DIR = os.path.join(os.environ.get('HOME'), "quonts_data")
+DEBUG_LEVEL = 1
 
 
 def create_dir(path) -> str:
