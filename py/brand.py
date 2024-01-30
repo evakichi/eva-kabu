@@ -1,5 +1,7 @@
 import common
 import requests
+import json
+import os
 
 
 class Brand:
@@ -25,10 +27,21 @@ class Brand:
         return _brand_data_list
 
     def get_brand_info(id_token):
-        _headers = {'Authorization': 'Bearer {}'.format(id_token)}
-        _information_get = requests.get(
-            f"https://api.jquants.com/v1/listed/info", headers=_headers)
-        return _information_get.json()['info']
+        __brand_data_dir = common.create_dir(
+            os.path.join(common.DATA_DIR, "brand_data"))
+        __brand_data_path = os.path.join(
+            __brand_data_dir, common.curren_date()+".json")
+
+        if os.path.exists(__brand_data_path):
+            with open(__brand_data_path, 'rt') as __file:
+                return json.load(__file)['info']
+
+        __headers = {'Authorization': 'Bearer {}'.format(id_token)}
+        __information_get = requests.get(
+            f"https://api.jquants.com/v1/listed/info", headers=__headers)
+        with open(__brand_data_path, 'wt') as __file:
+            json.dump(__information_get.json(), __file)
+        return __information_get.json()['info']
 
     def __init__(self, data) -> None:
         self.__date = data['Date']
@@ -45,36 +58,37 @@ class Brand:
         pass
 
     def print(self):
-        print(f'{self.get_date()}:{self.get_code()}:{self.get_company_name()}({self.get_company_name_english()}):', end="")
-        print(f'{self.get_sector17code_name()}({self.get_sector17code()}):{self.get_sector33code_name()}({self.get_sector33code()}):', end="")
         print(
-            f'{self.get_scale_category()}:{self.get_marketcode_name()}({self.get_marketcode()}):')
+            f'{self.date()}:{self.code()}:{self.company_name()}({self.company_name_english()}):', end="")
+        print(f'{self.sector17code_name()}({self.sector17code()}):{self.sector33code_name()}({self.sector33code()}):', end="")
+        print(
+            f'{self.scale_category()}:{self.get_marketcode_name()}({self.get_marketcode()}):')
 
-    def get_date(self):
+    def date(self):
         return self.__date
 
-    def get_code(self):
+    def code(self):
         return self.__brand_code
 
-    def get_company_name(self):
+    def company_name(self):
         return self.__company_name
 
-    def get_company_name_english(self):
+    def company_name_english(self):
         return self.__company_name_english
 
-    def get_sector17code(self):
+    def sector17code(self):
         return self.__sector17_code
 
-    def get_sector17code_name(self):
+    def sector17code_name(self):
         return self.__sector17_code_name
 
-    def get_sector33code(self):
+    def sector33code(self):
         return self.__sector33_code
 
-    def get_sector33code_name(self):
+    def sector33code_name(self):
         return self.__sector33_code_name
 
-    def get_scale_category(self):
+    def scale_category(self):
         return self.__scale_category
 
     def get_marketcode(self):

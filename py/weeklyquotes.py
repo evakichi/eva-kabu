@@ -1,6 +1,6 @@
 import common
 import quote
-import dailyquotes
+import candlestick
 
 
 class WeeklyQuotes:
@@ -25,9 +25,12 @@ class WeeklyQuotes:
         worksheet[f'C{row}'] = 'high'
         worksheet[f'D{row}'] = 'low'
         worksheet[f'E{row}'] = 'close'
+        worksheet[f'F{row}'] = 'basic'
+        worksheet[f'G{row}'] = 'advanced'
+        worksheet[f'H{row}'] = 'detailed'
 
     def write_xslx(self, workbook, begin_row):
-        worksheet = workbook.create_sheet(title=self.brand())
+        worksheet = workbook.create_sheet(title=self.brand().code())
         self.write_xlsx_header(worksheet, begin_row)
         for __weekly_quotes_index, __weekly_quotes in enumerate(self.__weekly_quotes_list, begin_row + 1):
             worksheet[f'A{__weekly_quotes_index}'] = __weekly_quotes.period()
@@ -35,6 +38,19 @@ class WeeklyQuotes:
             worksheet[f'C{__weekly_quotes_index}'] = __weekly_quotes.high()
             worksheet[f'D{__weekly_quotes_index}'] = __weekly_quotes.low()
             worksheet[f'E{__weekly_quotes_index}'] = __weekly_quotes.close()
+            worksheet[f'F{__weekly_quotes_index}'] = __weekly_quotes.basic_candle_stick(
+            ).to_string()
+            worksheet[f'G{__weekly_quotes_index}'] = __weekly_quotes.advanced_candle_stick(
+            ).to_string()
+            worksheet[f'H{__weekly_quotes_index}'] = __weekly_quotes.detailed_candle_stick(
+            ).to_string()
+
+    def re_calc(self):
+        for __weekly_quotes_index, __weekly_quotes in enumerate(self.__weekly_quotes_list):
+            __weekly_quotes.re_set(candlestick.BasicCandleStick.calc(__weekly_quotes),
+                                   candlestick.AdvancedCandleStick.calc(
+                __weekly_quotes),
+                candlestick.DetailedCandleStick.calc(__weekly_quotes))
 
     def calc(daily_quotes):
         __period = '1900-01'
@@ -51,7 +67,6 @@ class WeeklyQuotes:
                 __open = __quotes.open()
                 __high = __quotes.high()
                 __low = __quotes.low()
-                print(__period)
             else:
                 __high = max(__high, __quotes.high())
                 __low = min(__low, __quotes.low())

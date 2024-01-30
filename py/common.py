@@ -4,6 +4,7 @@ import openpyxl
 
 DATA_DIR = os.path.join(os.environ.get('HOME'), "quants_data")
 DEBUG_LEVEL = 1
+TEST = True
 
 
 def create_dir(path) -> str:
@@ -24,6 +25,10 @@ def year_month(date):
     month = int(date[5:7])
     day = int(date[8:10])
     return f'{year}-{datetime.datetime(year,month,day).strftime("%m")}'
+
+
+def curren_date():
+    return f'{datetime.datetime.today().strftime("%Y-%m-%d")}'
 
 
 def get_date(past_days):

@@ -1,5 +1,6 @@
 import common
 import quote
+import candlestick
 
 import requests
 import json
@@ -10,8 +11,12 @@ import glob
 class DailyQuotes:
 
     def store_daily_quotes_data(id_token, brand_data, past_days=-1):
+
+        if common.TEST:
+            return
+
         __headers = {'Authorization': f'Bearer {id_token}'}
-        __brand_code = brand_data.get_code()
+        __brand_code = brand_data.code()
         __current_dir = common.create_dir(
             os.path.join(common.DATA_DIR, __brand_code))
 
@@ -56,6 +61,13 @@ class DailyQuotes:
     def list(self):
         return self.__daily_quotes_list
 
+    def re_calc(self):
+        for __daily_quotes_index, __daily_quotes in enumerate(self.__daily_quotes_list):
+            __daily_quotes.re_set(candlestick.BasicCandleStick.calc(__daily_quotes),
+                                  candlestick.AdvancedCandleStick.calc(
+                                      __daily_quotes),
+                                  candlestick.DetailedCandleStick.calc(__daily_quotes))
+
     def write_xlsx_header(self, worksheet, row):
         worksheet[f'A{row}'] = 'date'
         worksheet[f'B{row}'] = 'open'
@@ -64,9 +76,11 @@ class DailyQuotes:
         worksheet[f'E{row}'] = 'close'
 
         worksheet[f'F{row}'] = 'basic'
+        worksheet[f'G{row}'] = 'advanced'
+        worksheet[f'H{row}'] = 'detailed'
 
     def write_xslx(self, workbook, begin_row):
-        worksheet = workbook.create_sheet(title=self.brand().get_code())
+        worksheet = workbook.create_sheet(title=self.brand().code())
         self.write_xlsx_header(worksheet, begin_row)
         for __daily_quotes_index, __daily_quotes in enumerate(self.__daily_quotes_list, begin_row + 1):
             worksheet[f'A{__daily_quotes_index}'] = __daily_quotes.period()
@@ -75,11 +89,15 @@ class DailyQuotes:
             worksheet[f'D{__daily_quotes_index}'] = __daily_quotes.low()
             worksheet[f'E{__daily_quotes_index}'] = __daily_quotes.close()
 
-            worksheet[f'F{__daily_quotes_index}'] = __daily_quotes.get_basic_candle_stick(
+            worksheet[f'F{__daily_quotes_index}'] = __daily_quotes.basic_candle_stick(
+            ).to_string()
+            worksheet[f'G{__daily_quotes_index}'] = __daily_quotes.advanced_candle_stick(
+            ).to_string()
+            worksheet[f'H{__daily_quotes_index}'] = __daily_quotes.detailed_candle_stick(
             ).to_string()
 
     def load(brand_data):
-        __current_dir = os.path.join(common.DATA_DIR, brand_data.get_code())
+        __current_dir = os.path.join(common.DATA_DIR, brand_data.code())
         __json_file_list = sorted(
             glob.glob(__current_dir+'/*.json', recursive=False))
         __daily_quotes = DailyQuotes(brand_data)

@@ -13,11 +13,19 @@ class Quote:
         self.__low = low
         self.__close = close
 
-    def set_basic_candle_stick(self, basic_candle_stick):
+    def re_set(self, basic_candle_stick, advanced_candle_stick, detailed_candle_stick):
         self.__basic_candle_stick = basic_candle_stick
+        self.__advanced_candle_stick = advanced_candle_stick
+        self.__detailed_candle_stick = detailed_candle_stick
 
-    def get_basic_candle_stick(self):
+    def basic_candle_stick(self):
         return self.__basic_candle_stick
+
+    def advanced_candle_stick(self):
+        return self.__advanced_candle_stick
+
+    def detailed_candle_stick(self):
+        return self.__detailed_candle_stick
 
     def print(self):
         print(
