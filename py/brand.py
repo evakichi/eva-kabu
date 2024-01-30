@@ -45,40 +45,40 @@ class Brand:
         pass
 
     def print(self):
-        print(f'{self.getDate()}:{self.getCode()}:{self.getCompanyName()}({self.getCompanyNameEnglish()}):', end="")
-        print(f'{self.getSector17CodeName()}({self.getSector17Code()}):{self.getSector33CodeName()}({self.getSector33Code()}):', end="")
+        print(f'{self.get_date()}:{self.get_code()}:{self.get_company_name()}({self.get_company_name_english()}):', end="")
+        print(f'{self.get_sector17code_name()}({self.get_sector17code()}):{self.get_sector33code_name()}({self.get_sector33code()}):', end="")
         print(
-            f'{self.getScaleCategory()}:{self.getMarketCodeName()}({self.getMarketCode()}):')
+            f'{self.get_scale_category()}:{self.get_marketcode_name()}({self.get_marketcode()}):')
 
-    def getDate(self):
+    def get_date(self):
         return self.__date
 
-    def getCode(self):
+    def get_code(self):
         return self.__brand_code
 
-    def getCompanyName(self):
+    def get_company_name(self):
         return self.__company_name
 
-    def getCompanyNameEnglish(self):
+    def get_company_name_english(self):
         return self.__company_name_english
 
-    def getSector17Code(self):
+    def get_sector17code(self):
         return self.__sector17_code
 
-    def getSector17CodeName(self):
+    def get_sector17code_name(self):
         return self.__sector17_code_name
 
-    def getSector33Code(self):
+    def get_sector33code(self):
         return self.__sector33_code
 
-    def getSector33CodeName(self):
+    def get_sector33code_name(self):
         return self.__sector33_code_name
 
-    def getScaleCategory(self):
+    def get_scale_category(self):
         return self.__scale_category
 
-    def getMarketCode(self):
+    def get_marketcode(self):
         return self.__market_code
 
-    def getMarketCodeName(self):
+    def get_marketcode_name(self):
         return self.__market_code_name

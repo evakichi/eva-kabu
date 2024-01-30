@@ -2,7 +2,7 @@ import os
 import datetime
 import openpyxl
 
-DATA_DIR = os.path.join(os.environ.get('HOME'), "quonts_data")
+DATA_DIR = os.path.join(os.environ.get('HOME'), "quants_data")
 DEBUG_LEVEL = 1
 
 

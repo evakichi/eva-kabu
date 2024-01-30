@@ -13,6 +13,12 @@ class Quote:
         self.__low = low
         self.__close = close
 
+    def set_basic_candle_stick(self, basic_candle_stick):
+        self.__basic_candle_stick = basic_candle_stick
+
+    def get_basic_candle_stick(self):
+        return self.__basic_candle_stick
+
     def print(self):
         print(
             f'{self.__period}:{self.__open}-{self.__high}-{self.__low}-{self.__close}')
