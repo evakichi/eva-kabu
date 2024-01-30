@@ -11,6 +11,20 @@ def create_dir(path) -> str:
     return path
 
 
+def year_week_number(date):
+    year = int(date[0:4])
+    month = int(date[5:7])
+    day = int(date[8:10])
+    return f'{year}-{datetime.datetime(year,month,day).strftime("%W")}'
+
+
+def year_month(date):
+    year = int(date[0:4])
+    month = int(date[5:7])
+    day = int(date[8:10])
+    return f'{year}-{datetime.datetime(year,month,day).strftime("%m")}'
+
+
 def get_date(past_days):
     current_datetime = datetime.datetime.today()
     return current_datetime + datetime.timedelta(days=-1*past_days)

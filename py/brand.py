@@ -30,7 +30,6 @@ class Brand:
             f"https://api.jquants.com/v1/listed/info", headers=_headers)
         return _information_get.json()['info']
 
-
     def __init__(self, data) -> None:
         self.__date = data['Date']
         self.__brand_code = data['Code']
