@@ -1,5 +1,6 @@
 import os
 import datetime
+import openpyxl
 
 DATA_DIR = os.path.join(os.environ.get('HOME'), "quonts_data")
 DEBUG_LEVEL = 1
@@ -28,3 +29,15 @@ def year_month(date):
 def get_date(past_days):
     current_datetime = datetime.datetime.today()
     return current_datetime + datetime.timedelta(days=-1*past_days)
+
+
+def brank_workbook():
+    __workbook = openpyxl.Workbook()
+    __worksheet = __workbook['Sheet']
+    __workbook.remove(__worksheet)
+    return __workbook
+
+
+def save_and_close_workbook(workbook, path):
+    workbook.save(path)
+    workbook.close()
