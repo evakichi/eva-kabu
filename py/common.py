@@ -2,9 +2,10 @@ import os
 import datetime
 import openpyxl
 
-DATA_DIR = os.path.join(os.environ.get('HOME'), "quants_data")
+DATA_DIR = os.path.join("/quants_data", "daily_data")
+XLSX_DIR = os.path.join("/quants_data", "xlsx_data")
 DEBUG_LEVEL = 1
-TEST = True
+TEST = False
 
 
 def create_dir(path) -> str:
