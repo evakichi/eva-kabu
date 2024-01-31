@@ -2,8 +2,8 @@ import os
 import datetime
 import openpyxl
 
-DATA_DIR = os.path.join("/quants_data", "daily_data")
-XLSX_DIR = os.path.join("/quants_data", "xlsx_data")
+DATA_DIR = os.path.join("/quants-data", "daily_data")
+XLSX_DIR = os.path.join("/quants-data", "xlsx_data")
 DEBUG_LEVEL = 1
 TEST = False
 
