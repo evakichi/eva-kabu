@@ -27,10 +27,9 @@ class Brand:
         return _brand_data_list
 
     def get_brand_info(id_token):
-        __brand_data_dir = common.create_dir(
-            os.path.join(common.DATA_DIR, "brand_data"))
+        
         __brand_data_path = os.path.join(
-            __brand_data_dir, common.curren_date()+".json")
+            common.BRAND_DIR, common.curren_date()+".json")
 
         if os.path.exists(__brand_data_path):
             with open(__brand_data_path, 'rt') as __file:
@@ -62,7 +61,7 @@ class Brand:
             f'{self.date()}:{self.code()}:{self.company_name()}({self.company_name_english()}):', end="")
         print(f'{self.sector17code_name()}({self.sector17code()}):{self.sector33code_name()}({self.sector33code()}):', end="")
         print(
-            f'{self.scale_category()}:{self.get_marketcode_name()}({self.get_marketcode()}):')
+            f'{self.scale_category()}:{self.get_marketcode_name()}({self.get_marketcode()}):',flush=True)
 
     def date(self):
         return self.__date
