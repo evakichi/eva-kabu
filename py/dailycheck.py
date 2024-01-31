@@ -16,8 +16,10 @@ if __name__ == '__main__':
     for __brand_data_index, __brand_data in enumerate(__brand_data_list):
         if common.TEST and __brand_data_index > 0:
             break
-        dailyquotes.DailyQuotes.store_daily_quotes_data(
-            __token, __brand_data, -1)
+        if common.DEBUG_LEVEL > 0:
+            print (f'{__brand_data.code()}')
+            dailyquotes.DailyQuotes.store_daily_quotes_data(
+                __token, __brand_data, -1)
 
     for __brand_data_index, __brand_data in enumerate(__brand_data_list):
         if common.TEST and __brand_data_index > 0:
