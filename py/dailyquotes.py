@@ -80,7 +80,7 @@ class DailyQuotes:
         worksheet[f'H{row}'] = 'detailed'
 
     def write_xslx(self, workbook, begin_row):
-        worksheet = workbook.create_sheet(title=self.brand().code())
+        worksheet = workbook.create_sheet(title='daily')
         self.write_xlsx_header(worksheet, begin_row)
         for __daily_quotes_index, __daily_quotes in enumerate(self.__daily_quotes_list, begin_row + 1):
             worksheet[f'A{__daily_quotes_index}'] = __daily_quotes.period()

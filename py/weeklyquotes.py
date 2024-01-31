@@ -30,7 +30,7 @@ class WeeklyQuotes:
         worksheet[f'H{row}'] = 'detailed'
 
     def write_xslx(self, workbook, begin_row):
-        worksheet = workbook.create_sheet(title=self.brand().code())
+        worksheet = workbook.create_sheet(title="weekly")
         self.write_xlsx_header(worksheet, begin_row)
         for __weekly_quotes_index, __weekly_quotes in enumerate(self.__weekly_quotes_list, begin_row + 1):
             worksheet[f'A{__weekly_quotes_index}'] = __weekly_quotes.period()
@@ -67,6 +67,7 @@ class WeeklyQuotes:
                 __open = __quotes.open()
                 __high = __quotes.high()
                 __low = __quotes.low()
+                __close = __quotes.close()
             else:
                 __high = max(__high, __quotes.high())
                 __low = min(__low, __quotes.low())

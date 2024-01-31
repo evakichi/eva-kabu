@@ -30,7 +30,7 @@ class MonthlyQuotes:
         worksheet[f'H{row}'] = 'detailed'
 
     def write_xslx(self, workbook, begin_row):
-        worksheet = workbook.create_sheet(title=self.brand().code())
+        worksheet = workbook.create_sheet(title='monthly')
         self.write_xlsx_header(worksheet, begin_row)
         for __monthly_quotes_index, __monthly_quotes in enumerate(self.__monthly_quotes_list, begin_row + 1):
             worksheet[f'A{__monthly_quotes_index}'] = __monthly_quotes.period()
@@ -47,7 +47,7 @@ class MonthlyQuotes:
             ).to_string()
 
     def re_calc(self):
-        for __monthly_quotes_index, __monthly_quotes in enumerate(self.__daily_quotes_list):
+        for __monthly_quotes_index, __monthly_quotes in enumerate(self.__monthly_quotes_list):
             __monthly_quotes.re_set(candlestick.BasicCandleStick.calc(__monthly_quotes),
                                     candlestick.AdvancedCandleStick.calc(
                 __monthly_quotes),
@@ -68,6 +68,7 @@ class MonthlyQuotes:
                 __open = __quotes.open()
                 __high = __quotes.high()
                 __low = __quotes.low()
+                __close = __quotes.close()
             else:
                 __high = max(__high, __quotes.high())
                 __low = min(__low, __quotes.low())
