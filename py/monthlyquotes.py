@@ -65,7 +65,7 @@ class MonthlyQuotes:
         __candle_stick_chart.height = 23
         __candle_stick_chart.legend = None
         
-        __candle_stick_graph = workbook.create_sheet(title='monthly graph')
+        __candle_stick_graph = workbook.create_sheet(title='monthly chart')
         __candle_stick_graph.add_chart(__candle_stick_chart,"A1")
 
     def re_calc(self):
