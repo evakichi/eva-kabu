@@ -61,8 +61,8 @@ class MonthlyQuotes:
         __candle_stick_chart.series[-1].val.numRef.numCache = __candle_stick_cache
 
         __candle_stick_chart.set_categories(__candle_stick_labels)
-        __candle_stick_chart.width = 32
-        __candle_stick_chart.height = 18
+        __candle_stick_chart.width = 40
+        __candle_stick_chart.height = 23
         __candle_stick_chart.legend = None
         
         __candle_stick_graph = workbook.create_sheet(title='monthly graph')
