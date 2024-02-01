@@ -19,6 +19,8 @@ class Brand:
     __market_code_name = ""
 
     def get_brand_data_list(id_token):
+        
+        common.create_dir(common.BRAND_DIR)
         _brand_data_list = [Brand(
             info) for info in Brand.get_brand_info(id_token)]
         if common.DEBUG_LEVEL > 0:

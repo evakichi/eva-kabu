@@ -1,7 +1,7 @@
 import common
 import quote
 import candlestick
-
+import openpyxl
 
 class WeeklyQuotes:
 
@@ -30,20 +30,41 @@ class WeeklyQuotes:
         worksheet[f'H{row}'] = 'detailed'
 
     def write_xslx(self, workbook, begin_row):
-        worksheet = workbook.create_sheet(title="weekly")
-        self.write_xlsx_header(worksheet, begin_row)
+        __worksheet = workbook.create_sheet(title="weekly")
+        self.write_xlsx_header(__worksheet, begin_row)
         for __weekly_quotes_index, __weekly_quotes in enumerate(self.__weekly_quotes_list, begin_row + 1):
-            worksheet[f'A{__weekly_quotes_index}'] = __weekly_quotes.period()
-            worksheet[f'B{__weekly_quotes_index}'] = __weekly_quotes.open()
-            worksheet[f'C{__weekly_quotes_index}'] = __weekly_quotes.high()
-            worksheet[f'D{__weekly_quotes_index}'] = __weekly_quotes.low()
-            worksheet[f'E{__weekly_quotes_index}'] = __weekly_quotes.close()
-            worksheet[f'F{__weekly_quotes_index}'] = __weekly_quotes.basic_candle_stick(
+            __worksheet[f'A{__weekly_quotes_index}'] = __weekly_quotes.period()
+            __worksheet[f'B{__weekly_quotes_index}'] = __weekly_quotes.open()
+            __worksheet[f'C{__weekly_quotes_index}'] = __weekly_quotes.high()
+            __worksheet[f'D{__weekly_quotes_index}'] = __weekly_quotes.low()
+            __worksheet[f'E{__weekly_quotes_index}'] = __weekly_quotes.close()
+            __worksheet[f'F{__weekly_quotes_index}'] = __weekly_quotes.basic_candle_stick(
             ).to_string()
-            worksheet[f'G{__weekly_quotes_index}'] = __weekly_quotes.advanced_candle_stick(
+            __worksheet[f'G{__weekly_quotes_index}'] = __weekly_quotes.advanced_candle_stick(
             ).to_string()
-            worksheet[f'H{__weekly_quotes_index}'] = __weekly_quotes.detailed_candle_stick(
+            __worksheet[f'H{__weekly_quotes_index}'] = __weekly_quotes.detailed_candle_stick(
             ).to_string()
+
+        __candle_stick_chart = openpyxl.chart.StockChart()
+        __candle_stick_labels = openpyxl.chart.Reference(__worksheet,min_col=1,min_row=2,max_row=__worksheet.max_row)
+        __candle_stick_data = openpyxl.chart.Reference(__worksheet,min_col=2,max_col=5,min_row=2,max_row=__worksheet.max_row)
+        __candle_stick_chart.add_data(__candle_stick_data,titles_from_data=True)
+        for __series in __candle_stick_chart.series:
+            __series.graphicalProperties.line.noFill = True
+        __candle_stick_chart.hiLowLines = openpyxl.chart.axis.ChartLines()
+        __candle_stick_chart.upDownBars = openpyxl.chart.updown_bars.UpDownBars()
+
+        __candle_stick_pts = [openpyxl.chart.data_source.NumVal(idx=i) for i in range(len(__candle_stick_data) - 1)]
+        __candle_stick_cache = openpyxl.chart.data_source.NumData(pt=__candle_stick_pts)
+        __candle_stick_chart.series[-1].val.numRef.numCache = __candle_stick_cache
+
+        __candle_stick_chart.set_categories(__candle_stick_labels)
+        __candle_stick_chart.width = 40
+        __candle_stick_chart.height = 23
+        __candle_stick_chart.legend = None
+        
+        __candle_stick_graph = workbook.create_sheet(title='weekly chart')
+        __candle_stick_graph.add_chart(__candle_stick_chart,"A1")
 
     def re_calc(self):
         for __weekly_quotes_index, __weekly_quotes in enumerate(self.__weekly_quotes_list):
