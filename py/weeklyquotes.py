@@ -1,6 +1,6 @@
 import common
 import quote
-import candlestick
+
 import openpyxl
 
 class WeeklyQuotes:
@@ -9,9 +9,9 @@ class WeeklyQuotes:
         self.__brand = brand
         self.__weekly_quotes_list = list()
 
-    def append(self, period, open, high, low, close):
+    def append(self, period, open, high, low, close, volume):
         self.__weekly_quotes_list.append(
-            quote.Quote(period, open, high, low, close))
+            quote.Quote(period, open, high, low, close, volume))
 
     def brand(self):
         return self.__brand
@@ -25,9 +25,7 @@ class WeeklyQuotes:
         worksheet[f'C{row}'] = 'high'
         worksheet[f'D{row}'] = 'low'
         worksheet[f'E{row}'] = 'close'
-        worksheet[f'F{row}'] = 'basic'
-        worksheet[f'G{row}'] = 'advanced'
-        worksheet[f'H{row}'] = 'detailed'
+        worksheet[f'F{row}'] = 'volume'
 
     def write_xslx(self, workbook, begin_row):
         __worksheet = workbook.create_sheet(title="weekly")
@@ -38,12 +36,7 @@ class WeeklyQuotes:
             __worksheet[f'C{__weekly_quotes_index}'] = __weekly_quotes.high()
             __worksheet[f'D{__weekly_quotes_index}'] = __weekly_quotes.low()
             __worksheet[f'E{__weekly_quotes_index}'] = __weekly_quotes.close()
-            __worksheet[f'F{__weekly_quotes_index}'] = __weekly_quotes.basic_candle_stick(
-            ).to_string()
-            __worksheet[f'G{__weekly_quotes_index}'] = __weekly_quotes.advanced_candle_stick(
-            ).to_string()
-            __worksheet[f'H{__weekly_quotes_index}'] = __weekly_quotes.detailed_candle_stick(
-            ).to_string()
+            __worksheet[f'F{__weekly_quotes_index}'] = __weekly_quotes.volume()
 
         __candle_stick_chart = openpyxl.chart.StockChart()
         __candle_stick_labels = openpyxl.chart.Reference(__worksheet,min_col=1,min_row=2,max_row=__worksheet.max_row)
@@ -66,13 +59,6 @@ class WeeklyQuotes:
         __candle_stick_graph = workbook.create_sheet(title='weekly chart')
         __candle_stick_graph.add_chart(__candle_stick_chart,"A1")
 
-    def re_calc(self):
-        for __weekly_quotes_index, __weekly_quotes in enumerate(self.__weekly_quotes_list):
-            __weekly_quotes.re_set(candlestick.BasicCandleStick.calc(__weekly_quotes),
-                                   candlestick.AdvancedCandleStick.calc(
-                __weekly_quotes),
-                candlestick.DetailedCandleStick.calc(__weekly_quotes))
-
     def calc(daily_quotes):
         __period = '1900-01'
         __brand = daily_quotes.brand()
@@ -86,25 +72,29 @@ class WeeklyQuotes:
                 __open = __quotes.open()
                 __high = __quotes.high()
                 __low = __quotes.low()
+                __volume = __quotes.volume()
 
             if __period != __quotes_period:
                 __weekly_quotes.append(
-                    __period, __open, __high, __low, __close)
+                    __period, __open, __high, __low, __close, __volume)
                 __period = __quotes_period                
                 __open = __quotes.open()
                 __high = __quotes.high()
                 __low = __quotes.low()
+                __volume = __quotes.volume()
 
             if __period == __quotes_period:
                 __high = max(__high, __quotes.high())
                 __low = min(__low, __quotes.low())
+                __volume += __quotes.volume()
                 __close = __quotes.close()
 
             if __quotes_index == __last_index:               
                 __high = max(__high, __quotes.high())
                 __low = min(__low, __quotes.low())
+                __volume += __quotes.volume()
                 __close = __quotes.close()
                 __weekly_quotes.append(
-                    __period, __open, __high, __low, __close)
+                    __period, __open, __high, __low, __close, __volume)
 
         return __weekly_quotes

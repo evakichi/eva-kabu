@@ -1,6 +1,5 @@
 import common
 import quote
-import candlestick
 
 import requests
 import json
@@ -14,7 +13,7 @@ class DailyQuotes:
 
         if common.TEST:
             return
-
+        print(f'{brand_data.code()}')
         __headers = {'Authorization': f'Bearer {id_token}'}
         __brand_code = brand_data.code()
         __current_dir = common.create_dir(
@@ -51,9 +50,10 @@ class DailyQuotes:
         __high = float(json_data['High'])
         __low = float(json_data['Low'])
         __close = float(json_data['Close'])
+        __volume = int(json_data['Volume'])
 
         self.__daily_quotes_list.append(quote.Quote(
-            __date, __open, __high, __low, __close))
+            __date, __open, __high, __low, __close, __volume))
 
     def brand(self):
         return self.__brand
@@ -61,23 +61,13 @@ class DailyQuotes:
     def list(self):
         return self.__daily_quotes_list
 
-    def re_calc(self):
-        for __daily_quotes_index, __daily_quotes in enumerate(self.__daily_quotes_list):
-            __daily_quotes.re_set(candlestick.BasicCandleStick.calc(__daily_quotes),
-                                  candlestick.AdvancedCandleStick.calc(
-                                      __daily_quotes),
-                                  candlestick.DetailedCandleStick.calc(__daily_quotes))
-
     def write_xlsx_header(self, worksheet, row):
         worksheet[f'A{row}'] = 'date'
         worksheet[f'B{row}'] = 'open'
         worksheet[f'C{row}'] = 'high'
         worksheet[f'D{row}'] = 'low'
         worksheet[f'E{row}'] = 'close'
-
-        worksheet[f'F{row}'] = 'basic'
-        worksheet[f'G{row}'] = 'advanced'
-        worksheet[f'H{row}'] = 'detailed'
+        worksheet[f'F{row}'] = 'volume'
 
     def write_xslx(self, workbook, begin_row):
         worksheet = workbook.create_sheet(title='daily')
@@ -88,13 +78,7 @@ class DailyQuotes:
             worksheet[f'C{__daily_quotes_index}'] = __daily_quotes.high()
             worksheet[f'D{__daily_quotes_index}'] = __daily_quotes.low()
             worksheet[f'E{__daily_quotes_index}'] = __daily_quotes.close()
-
-            worksheet[f'F{__daily_quotes_index}'] = __daily_quotes.basic_candle_stick(
-            ).to_string()
-            worksheet[f'G{__daily_quotes_index}'] = __daily_quotes.advanced_candle_stick(
-            ).to_string()
-            worksheet[f'H{__daily_quotes_index}'] = __daily_quotes.detailed_candle_stick(
-            ).to_string()
+            worksheet[f'F{__daily_quotes_index}'] = __daily_quotes.volume()
 
     def load(brand_data):
         __current_dir = os.path.join(common.DATA_DIR, brand_data.code())
