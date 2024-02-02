@@ -10,7 +10,8 @@ import math
 import datetime
 from multiprocessing import Process
 
-def calc(brand_data,count):
+
+def calc(brand_data, count):
     if common.TEST and count > common.NUM_OF_THREADS:
         return
 
@@ -22,15 +23,16 @@ def calc(brand_data,count):
     __workbook = common.brank_workbook()
 
     __daily_quotes = dailyquotes.DailyQuotes.load(brand_data)
-    __daily_quotes.write_xslx(__workbook, 1)
+    __daily_quotes.write_xslx(__workbook,brand_data.code(), 1)
 
     __weekly_quotes = weeklyquotes.WeeklyQuotes.calc(__daily_quotes)
-    __weekly_quotes.write_xslx(__workbook, 1)
+    __weekly_quotes.write_xslx(__workbook,brand_data.code(), 1)
 
     __monthly_quotes = monthlyquotes.MonthlyQuotes.calc(__daily_quotes)
-    __monthly_quotes.write_xslx(__workbook, 1)
+    __monthly_quotes.write_xslx(__workbook,brand_data.code(), 1)
 
     common.save_and_close_workbook(__workbook, __xlsx_path)
+    print(f'{brand_data.code()} is converted!')
 
 if __name__ == '__main__':
 
@@ -39,16 +41,7 @@ if __name__ == '__main__':
 
     __brand_data_list = brand.Brand.get_brand_data_list(__token)
 
-#    for __brand_data_index, __brand_data in enumerate(__brand_data_list):
-#        if common.TEST and __brand_data_index > common.NUM_OF_THREADS:
-#            break
-#        if common.DEBUG_LEVEL > 0:
-#            print (f'{__brand_data.code()}',flush=True)
-#        dailyquotes.DailyQuotes.store_daily_quotes_data(
-#            __token, __brand_data, 1)
-
     __brand_data_length = len(__brand_data_list)
-
     __outerloop_count = math.floor(__brand_data_length / common.NUM_OF_THREADS)
     __last_innerloop_count = __brand_data_length % common.NUM_OF_THREADS
 
@@ -57,7 +50,8 @@ if __name__ == '__main__':
         for __innerloop_index in range(common.NUM_OF_THREADS):
             __count = __outerloop_index * common.NUM_OF_THREADS + __innerloop_index
             __brand_data = __brand_data_list[__count]
-            __process_list.append(Process(target=dailyquotes.DailyQuotes.store_daily_quotes_data,args=(__token,__brand_data,1)))
+            __process_list.append(Process(
+                target=dailyquotes.DailyQuotes.store_daily_quotes_data, args=(__token, __brand_data, 1)))
         for n in range(common.NUM_OF_THREADS):
             __process_list[n].start()
         for n in range(common.NUM_OF_THREADS):
@@ -67,7 +61,8 @@ if __name__ == '__main__':
     for __innerloop_index in range(__last_innerloop_count):
         __count = __outerloop_index * common.NUM_OF_THREADS + __innerloop_index
         __brand_data = __brand_data_list[__count]
-        __process_list.append(Process(target=dailyquotes.DailyQuotes.store_daily_quotes_data,args=(__token,__brand_data,1)))
+        __process_list.append(Process(
+            target=dailyquotes.DailyQuotes.store_daily_quotes_data, args=(__token, __brand_data, 1)))
     for n in range(__last_innerloop_count):
         __process_list[n].start()
     for n in range(__last_innerloop_count):
@@ -78,7 +73,8 @@ if __name__ == '__main__':
         for __innerloop_index in range(common.NUM_OF_THREADS):
             __count = __outerloop_index * common.NUM_OF_THREADS + __innerloop_index
             __brand_data = __brand_data_list[__count]
-            __process_list.append(Process(target=calc,args=(__brand_data,__count)))
+            __process_list.append(
+                Process(target=calc, args=(__brand_data, __count)))
         for n in range(common.NUM_OF_THREADS):
             __process_list[n].start()
         for n in range(common.NUM_OF_THREADS):
@@ -88,7 +84,8 @@ if __name__ == '__main__':
     for __innerloop_index in range(__last_innerloop_count):
         __count = __outerloop_index * common.NUM_OF_THREADS + __innerloop_index
         __brand_data = __brand_data_list[__count]
-        __process_list.append(Process(target=calc,args=(__brand_data,__count)))
+        __process_list.append(
+            Process(target=calc, args=(__brand_data, __count)))
     for n in range(__last_innerloop_count):
         __process_list[n].start()
     for n in range(__last_innerloop_count):

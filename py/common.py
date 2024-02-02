@@ -8,7 +8,7 @@ XLSX_DIR = os.path.join("/quants-data", "xlsx-data")
 NUM_OF_THREADS = int(os.environ.get('NUM_OF_THREADS'))
 
 DEBUG_LEVEL = 1
-TEST = False
+TEST = True
 
 
 def create_dir(path) -> str:

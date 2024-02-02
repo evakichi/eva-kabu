@@ -1,5 +1,6 @@
 import common
 import quote
+import quoteslist
 
 import requests
 import json
@@ -7,7 +8,23 @@ import os
 import glob
 
 
-class DailyQuotes:
+class DailyQuotes(quoteslist.QuoteList):
+
+    def __init__(self, brand) -> None:
+        super().__init__(brand)
+
+    def append(self, json_data):
+        if json_data['Date'] is None or json_data['Open'] is None or json_data['High'] is None or json_data['Low'] is None or json_data['Close'] is None:
+            return None
+        __date = json_data['Date']
+        __open = float(json_data['Open'])
+        __high = float(json_data['High'])
+        __low = float(json_data['Low'])
+        __close = float(json_data['Close'])
+        __volume = int(json_data['Volume'])
+
+        super().append(__date, __open, __high, __low, __close, __volume)
+
 
     def store_daily_quotes_data(id_token, brand_data, past_days=-1):
 
@@ -37,48 +54,6 @@ class DailyQuotes:
                 if not os.path.exists(__current_file_path):
                     with open(__current_file_path, 'w') as _file:
                         json.dump(__daily_quotes, _file)
-
-    def __init__(self, brand) -> None:
-        self.__brand = brand
-        self.__daily_quotes_list = list()
-
-    def append(self, json_data):
-        if json_data['Date'] is None or json_data['Open'] is None or json_data['High'] is None or json_data['Low'] is None or json_data['Close'] is None:
-            return None
-        __date = json_data['Date']
-        __open = float(json_data['Open'])
-        __high = float(json_data['High'])
-        __low = float(json_data['Low'])
-        __close = float(json_data['Close'])
-        __volume = int(json_data['Volume'])
-
-        self.__daily_quotes_list.append(quote.Quote(
-            __date, __open, __high, __low, __close, __volume))
-
-    def brand(self):
-        return self.__brand
-
-    def list(self):
-        return self.__daily_quotes_list
-
-    def write_xlsx_header(self, worksheet, row):
-        worksheet[f'A{row}'] = 'date'
-        worksheet[f'B{row}'] = 'open'
-        worksheet[f'C{row}'] = 'high'
-        worksheet[f'D{row}'] = 'low'
-        worksheet[f'E{row}'] = 'close'
-        worksheet[f'F{row}'] = 'volume'
-
-    def write_xslx(self, workbook, begin_row):
-        worksheet = workbook.create_sheet(title='daily')
-        self.write_xlsx_header(worksheet, begin_row)
-        for __daily_quotes_index, __daily_quotes in enumerate(self.__daily_quotes_list, begin_row + 1):
-            worksheet[f'A{__daily_quotes_index}'] = __daily_quotes.period()
-            worksheet[f'B{__daily_quotes_index}'] = __daily_quotes.open()
-            worksheet[f'C{__daily_quotes_index}'] = __daily_quotes.high()
-            worksheet[f'D{__daily_quotes_index}'] = __daily_quotes.low()
-            worksheet[f'E{__daily_quotes_index}'] = __daily_quotes.close()
-            worksheet[f'F{__daily_quotes_index}'] = __daily_quotes.volume()
 
     def load(brand_data):
         __current_dir = os.path.join(common.DATA_DIR, brand_data.code())

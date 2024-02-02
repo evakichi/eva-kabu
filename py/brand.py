@@ -19,7 +19,7 @@ class Brand:
     __market_code_name = ""
 
     def get_brand_data_list(id_token):
-        
+
         common.create_dir(common.BRAND_DIR)
         _brand_data_list = [Brand(
             info) for info in Brand.get_brand_info(id_token)]
@@ -29,7 +29,7 @@ class Brand:
         return _brand_data_list
 
     def get_brand_info(id_token):
-        
+
         __brand_data_path = os.path.join(
             common.BRAND_DIR, common.curren_date()+".json")
 
@@ -63,7 +63,7 @@ class Brand:
             f'{self.date()}:{self.code()}:{self.company_name()}({self.company_name_english()}):', end="")
         print(f'{self.sector17code_name()}({self.sector17code()}):{self.sector33code_name()}({self.sector33code()}):', end="")
         print(
-            f'{self.scale_category()}:{self.get_marketcode_name()}({self.get_marketcode()}):',flush=True)
+            f'{self.scale_category()}:{self.get_marketcode_name()}({self.get_marketcode()}):', flush=True)
 
     def date(self):
         return self.__date
