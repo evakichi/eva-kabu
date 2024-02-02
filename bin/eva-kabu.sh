@@ -1,5 +1,5 @@
 #!/bin/bash
 DATE=$(date '+%Y%m%d-%H%M%S')
-NUM_OF_THREADS=$(grep processor /proc/cpuinfo | wc -l)
+export NUM_OF_THREADS=$(grep processor /proc/cpuinfo | wc -l)
 source  ${HOME}/.eva-kabu.passwd
 python3.10 ${HOME}/eva-kabu/py/dailycheck.py 2>&1 |tee /var/log/eva-kabu/${DATE}.log
