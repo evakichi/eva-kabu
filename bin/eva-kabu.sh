@@ -2,4 +2,4 @@
 DATE=$(date '+%Y%m%d-%H%M%S')
 export NUM_OF_THREADS=$(grep processor /proc/cpuinfo | wc -l)
 source  ${HOME}/.eva-kabu.passwd
-python3.10 ${HOME}/eva-kabu/py/dailycheck.py 2>&1 |tee /var/log/eva-kabu/${DATE}.log
+time python3 ${HOME}/eva-kabu/py/dailycheck.py 2>&1 |tee /var/log/eva-kabu/${DATE}.log
