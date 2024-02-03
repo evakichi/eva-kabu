@@ -23,16 +23,17 @@ def calc(brand_data, count):
     __workbook = common.brank_workbook()
 
     __daily_quotes = dailyquotes.DailyQuotes.load(brand_data)
-    __daily_quotes.write_xslx(__workbook,brand_data.code(), 1)
+    __daily_quotes.write_xslx(__workbook, brand_data, 'daily chart', 1)
 
     __weekly_quotes = weeklyquotes.WeeklyQuotes.calc(__daily_quotes)
-    __weekly_quotes.write_xslx(__workbook,brand_data.code(), 1)
+    __weekly_quotes.write_xslx(__workbook, brand_data, 'weekly chart', 1)
 
     __monthly_quotes = monthlyquotes.MonthlyQuotes.calc(__daily_quotes)
-    __monthly_quotes.write_xslx(__workbook,brand_data.code(), 1)
+    __monthly_quotes.write_xslx(__workbook, brand_data, 'monthly chart', 1)
 
     common.save_and_close_workbook(__workbook, __xlsx_path)
     print(f'{brand_data.code()} is converted!')
+
 
 if __name__ == '__main__':
 

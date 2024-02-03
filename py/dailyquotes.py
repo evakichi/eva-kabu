@@ -25,7 +25,6 @@ class DailyQuotes(quoteslist.QuoteList):
 
         super().append(__date, __open, __high, __low, __close, __volume)
 
-
     def store_daily_quotes_data(id_token, brand_data, past_days=-1):
 
         if common.TEST:

@@ -5,7 +5,7 @@ import quote
 
 class QuoteList:
 
-    def __init__(self,brand) -> None:
+    def __init__(self, brand) -> None:
         self.__brand = brand
         self.__quotes_list = list()
 
@@ -15,12 +15,12 @@ class QuoteList:
 
     def brand(self):
         return self.__brand
-    
+
     def list(self):
         return self.__quotes_list
 
-    def write_xslx(self, workbook, title, start_row):
-        __worksheet = workbook.create_sheet(title=title)
+    def write_xslx(self, workbook, brand, title, start_row):
+        __worksheet = workbook.create_sheet(title=brand.code())
 
         __worksheet[f'A{start_row}'] = 'month'
         __worksheet[f'B{start_row}'] = 'open'
@@ -60,5 +60,5 @@ class QuoteList:
         __candle_stick_chart.height = 23
         __candle_stick_chart.legend = None
 
-        __candle_stick_graph = workbook.create_sheet(title='monthly chart')
+        __candle_stick_graph = workbook.create_sheet(title=title)
         __candle_stick_graph.add_chart(__candle_stick_chart, "A1")
