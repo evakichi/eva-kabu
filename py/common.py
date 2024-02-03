@@ -5,10 +5,14 @@ import openpyxl
 DATA_DIR = os.path.join("/quants-data", "daily-data")
 BRAND_DIR = os.path.join("/quants-data", "brand-data")
 XLSX_DIR = os.path.join("/quants-data", "xlsx-data")
-NUM_OF_THREADS = int(os.environ.get('NUM_OF_THREADS'))
 
 DEBUG_LEVEL = 1
 TEST = False
+
+if TEST:
+    NUM_OF_THREADS = 1
+else:
+    NUM_OF_THREADS = int(os.environ.get('NUM_OF_THREADS'))
 
 
 def create_dir(path) -> str:
