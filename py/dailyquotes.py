@@ -39,9 +39,10 @@ class DailyQuotes(quoteslist.QuoteList):
             __daily_quotes_get = requests.get(
                 f"https://api.jquants.com/v1/prices/daily_quotes?code={__brand_code}", headers=__headers)
         else:
-            __date = common.get_date(past_days).strftime('%Y-%m-%d')
+            __from_date = common.get_date(past_days).strftime('%Y-%m-%d')
+            __to_date = common.get_date(0).strftime('%Y-%m-%d')
             __daily_quotes_get = requests.get(
-                f"https://api.jquants.com/v1/prices/daily_quotes?code={__brand_code}&date={__date}", headers=__headers)
+                f"https://api.jquants.com/v1/prices/daily_quotes?code={__brand_code}&from={__from_date}&to={__to_date}", headers=__headers)
 
         __daily_quotes_json = __daily_quotes_get.json()
 
