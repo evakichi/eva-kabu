@@ -4,6 +4,7 @@ import openpyxl
 
 DATA_DIR = os.path.join("/quants-data", "daily-data")
 BRAND_DIR = os.path.join("/quants-data", "brand-data")
+CALENDAR_DIR = os.path.join("/quants-data", "calendar-data")
 XLSX_DIR = os.path.join("/quants-data", "xlsx-data")
 
 DEBUG_LEVEL = 1
