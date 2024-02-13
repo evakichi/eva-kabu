@@ -27,7 +27,7 @@ if __name__ == '__main__':
             __count = __outerloop_index * common.NUM_OF_THREADS + __innerloop_index
             __brand_data = __brand_data_list[__count]
             __process_list.append(Process(
-                target=dailyquotes.DailyQuotes.store_daily_quotes_data, args=(__token, __brand_data,3)))
+                target=dailyquotes.DailyQuotes.store_daily_quotes_data, args=(__token, __brand_data,5)))
         for n in range(common.NUM_OF_THREADS):
             __process_list[n].start()
         for n in range(common.NUM_OF_THREADS):
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         __count = __outerloop_index * common.NUM_OF_THREADS + __innerloop_index
         __brand_data = __brand_data_list[__count]
         __process_list.append(Process(
-            target=dailyquotes.DailyQuotes.store_daily_quotes_data, args=(__token, __brand_data, 3)))
+            target=dailyquotes.DailyQuotes.store_daily_quotes_data, args=(__token, __brand_data, 5)))
     for n in range(__last_innerloop_count):
         __process_list[n].start()
     for n in range(__last_innerloop_count):
