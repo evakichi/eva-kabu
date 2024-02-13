@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     __brand_data_list = brand.Brand.get_brand_data_list(__token)
     tradingcalendar.TradingCalendar.dump(__token)
-    exit()
+    
     __brand_data_length = len(__brand_data_list)
     __outerloop_count = math.floor(__brand_data_length / common.NUM_OF_THREADS)
     __last_innerloop_count = __brand_data_length % common.NUM_OF_THREADS
